@@ -7,6 +7,7 @@ import com.odtheking.odin.features.ModuleManager
 import com.odtheking.odin.features.Module
 import com.odtheking.odinaddon.features.impl.render.Animations
 import net.fabricmc.api.ClientModInitializer
+import net.minecraft.world.entity.LivingEntity
 
 object OdinAnimations : ClientModInitializer {
 

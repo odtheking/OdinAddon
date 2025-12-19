@@ -6,7 +6,9 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.odtheking.odinaddon.features.impl.render.Animations;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
@@ -63,6 +65,17 @@ public abstract class ItemInHandRendererMixin {
 
         this.applyItemArmTransform(poseStack, arm, equipProgress);
         this.applyItemArmAttackTransform(poseStack, arm, swingProgress);
+    }
+
+    @Inject(
+            method = "renderArmWithItem",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"
+            )
+    )
+    private void applySizeTransform(AbstractClientPlayer abstractClientPlayer, float f, float g, InteractionHand interactionHand, float h, ItemStack itemStack, float i, PoseStack poseStack, MultiBufferSource multiBufferSource, int j, CallbackInfo ci, @Local(argsOnly = true) InteractionHand hand) {
+        if (Animations.isActive()) poseStack.scale(Animations.getSize(), Animations.getSize(), Animations.getSize());
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
