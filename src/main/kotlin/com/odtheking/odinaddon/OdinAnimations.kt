@@ -4,12 +4,10 @@ import com.odtheking.odin.clickgui.settings.impl.HUDSetting
 import com.odtheking.odin.clickgui.settings.impl.KeybindSetting
 import com.odtheking.odin.events.core.EventBus
 import com.odtheking.odin.features.ModuleManager
-import com.odtheking.odinaddon.commands.odinAddonCommand
-import com.odtheking.odinaddon.features.impl.skyblock.TestModule
+import com.odtheking.odinaddon.features.impl.render.Animations
 import net.fabricmc.api.ClientModInitializer
-import net.minecraft.world.entity.LivingEntity
 
-object OdinAddon : ClientModInitializer {
+object OdinAnimations : ClientModInitializer {
 
     override fun onInitializeClient() {
         listOf(this).forEach { EventBus.subscribe(it) }
