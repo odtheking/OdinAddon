@@ -4,8 +4,7 @@
   "package": "com.odtheking.odinaddon.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LivingEntityMixin",
-    "ModuleManagerMixin"
+    "LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
