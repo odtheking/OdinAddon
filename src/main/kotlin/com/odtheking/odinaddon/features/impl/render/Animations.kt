@@ -1,7 +1,6 @@
 package com.odtheking.odinaddon.features.impl.render
 
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
-import com.odtheking.odin.clickgui.settings.impl.ActionSetting
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.features.Module
@@ -22,10 +21,6 @@ object Animations : Module(
 
     val noEquipReset by BooleanSetting("No Equip Reset", false, desc = "Disables the equipping animation when switching items.")
     val noSwing by BooleanSetting("No Swing", false, desc = "Prevents your item from visually swinging forward.")
-
-    private val reset by ActionSetting("Reset", desc = "Resets the settings to their default values.") {
-        settings.forEach { it.reset() }
-    }
 
     @JvmStatic
     val shouldNoEquipReset get() = enabled && noEquipReset
