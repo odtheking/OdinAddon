@@ -25,9 +25,14 @@ dependencies {
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
     modImplementation("com.github.odtheking:odinfabric:${property("odin_version")}")
 
-    property("commodore_version").let {
-        implementation("com.github.stivais:Commodore:$it")
-        include("com.github.stivais:Commodore:$it")
+    modImplementation("com.github.stivais:Commodore:${property("commodore_version")}")
+
+    property("minecraft_lwjgl_version").let { lwjglVersion ->
+        modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
+
+        listOf("windows", "linux", "macos", "macos-arm64").forEach { os ->
+            modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
+        }
     }
 }
 
