@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 
 object OdinAnimations : ClientModInitializer {
+    // Shared addon config file. Multiple addons can point at the same file safely (see ModuleConfigMixin).
     private val config = ModuleConfig("OdinAddon.json")
 
     override fun onInitializeClient() {
@@ -17,11 +18,11 @@ object OdinAnimations : ClientModInitializer {
         ModuleManager.registerModules(config, Animations)
 
         ClientPlayConnectionEvents.DISCONNECT.register { _, _ ->
-            config.save()
+            ModuleManager.saveConfigurations()
         }
 
         ClientLifecycleEvents.CLIENT_STOPPING.register {
-            config.save()
+            ModuleManager.saveConfigurations()
         }
     }
 }
