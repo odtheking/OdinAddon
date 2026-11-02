@@ -1,13 +1,21 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("fabric-loom")
+    id("net.fabricmc.fabric-loom")
     kotlin("jvm")
     `maven-publish`
+    idea
 }
 
-group = property("maven_group")!!
-version = property("mod_version")!!
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
+}
+
+group = property("maven_group") as String
+version = property("mod_version") as String
 
 repositories {
     mavenCentral()
@@ -17,26 +25,28 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
+    implementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    implementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
-    modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
-    modImplementation("com.github.odtheking:odinfabric:${property("odin_version")}")
-
-    modImplementation("com.github.stivais:Commodore:${property("commodore_version")}")
+    runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
+    implementation("com.github.stivais:Commodore:${property("commodore_version")}")
+    
+    implementation(files("libs/${File("libs").listFiles()?.get(0)?.name}"))
+    //implementation("com.github.odtheking:odinFabric:${property("odin_version")}")
+    //TODO remove explicit jar
 
     property("minecraft_lwjgl_version").let { lwjglVersion ->
-        modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
+        implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
 
         listOf("windows", "linux", "macos", "macos-arm64").forEach { os ->
-            modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
+            implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
         }
     }
 }
 
 loom {
+    accessWidenerPath = rootProject.file("src/main/resources/odinaddon.accesswidener")
     runConfigs.named("client") {
         isIdeConfigGenerated = true
         vmArgs.addAll(
@@ -62,21 +72,30 @@ afterEvaluate {
 
 tasks {
     processResources {
+        val props = mapOf(
+            "version" to version,
+            "minecraft_version" to project.property("minecraft_version"),
+            "loader_version" to project.property("loader_version"),
+            "odin_version" to project.property("odin_version")
+        )
+        
+        inputs.properties(props)
+        
         filesMatching("fabric.mod.json") {
-            expand(getProperties())
+            expand(props)
         }
     }
 
     compileKotlin {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
+            jvmTarget = JvmTarget.JVM_25
             freeCompilerArgs.add("-Xlambdas=class") //Commodore
         }
     }
 
     compileJava {
-        sourceCompatibility = "21"
-        targetCompatibility = "21"
+        sourceCompatibility = "25"
+        targetCompatibility = "25"
         options.encoding = "UTF-8"
         options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:unchecked"))
     }
@@ -86,7 +105,7 @@ base {
     archivesName.set(project.property("archives_base_name") as String)
 }
 
-val targetJavaVersion = 21
+val targetJavaVersion = 25
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
 
