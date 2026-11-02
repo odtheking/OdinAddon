@@ -18,6 +18,7 @@ group = property("maven_group") as String
 version = property("mod_version") as String
 
 repositories {
+    google()
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
@@ -28,17 +29,17 @@ dependencies {
     implementation("net.fabricmc:fabric-loader:${property("loader_version")}")
     implementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
     implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
-
+    
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
     implementation("com.github.stivais:Commodore:${property("commodore_version")}")
     
-    implementation(files("libs/${File("libs").listFiles()?.get(0)?.name}"))
-    //implementation("com.github.odtheking:odinFabric:${property("odin_version")}")
-    //TODO remove explicit jar
-
+    implementation("com.github.odtheking:odinFabric:${property("odin_version")}")
+    //implementation(files("libs/${File("libs").listFiles()?.get(0)?.name}"))
+    //swap to local if jitpack breaks again
+    
     property("minecraft_lwjgl_version").let { lwjglVersion ->
         implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
-
+        
         listOf("windows", "linux", "macos", "macos-arm64").forEach { os ->
             implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
         }
@@ -58,7 +59,7 @@ loom {
             )
         )
     }
-
+    
     runConfigs.named("server") {
         isIdeConfigGenerated = false
     }
@@ -85,14 +86,14 @@ tasks {
             expand(props)
         }
     }
-
+    
     compileKotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_25
             freeCompilerArgs.add("-Xlambdas=class") //Commodore
         }
     }
-
+    
     compileJava {
         sourceCompatibility = "25"
         targetCompatibility = "25"
@@ -108,7 +109,7 @@ base {
 val targetJavaVersion = 25
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-
+    
     withSourcesJar()
 }
 
