@@ -7,7 +7,7 @@
   "authors": [],
   "contact": {},
   "license": "BSD-3-Clause",
-  "icon": "assets/odinaddon/icon.png",
+  "icon": "assets/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -20,11 +20,12 @@
   "mixins": [
     "odinaddon.mixins.json"
   ],
+  "accessWidener": "odinaddon.accesswidener",
   "depends": {
+    "minecraft": ">=${minecraft_version}",
     "fabricloader": ">=${loader_version}",
-    "fabric-api": ">=${fabric_api_version}",
-    "minecraft": "~${minecraft_version}",
-    "fabric-language-kotlin": ">=${fabric_kotlin_version}",
-    "odin": "*"
+    "fabric-api": "*",
+    "fabric-language-kotlin": "*",
+    "odin": ">=${odin_version}"
   }
 }

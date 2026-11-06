@@ -3,27 +3,16 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id("net.fabricmc.fabric-loom")
     kotlin("jvm")
-    `maven-publish`
 }
 
-group = property("maven_group")!!
-version = property("mod_version")!!
+group = property("maven_group") as String
+version = property("mod_version") as String
 
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
-    maven("https://maven.terraformersmc.com/")
     maven("https://api.modrinth.com/maven")
-    ivy {
-        url = uri("https://github.com/odtheking/Odin/releases/download")
-        patternLayout {
-            artifact("[revision]/[artifact]-[revision].[ext]")
-        }
-        metadataSources {
-            artifact()
-        }
-    }
 }
 
 dependencies {
@@ -33,54 +22,44 @@ dependencies {
     implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
-    compileOnly("com.odtheking:Odin:${property("odin_version")}@jar")
 
-    property("commodore_version").let {
-        implementation("com.github.stivais:Commodore:$it")
-        include("com.github.stivais:Commodore:$it")
-    }
-
-    compileOnly("com.terraformersmc:modmenu:${property("modmenu_version")}")
-
-    property("minecraft_lwjgl_version").let { lwjglVersion ->
-        implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
-        include("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
-
-        listOf("windows", "linux", "macos", "macos-arm64").forEach { os ->
-            implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
-            include("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
-        }
-    }
-
-    compileOnly("maven.modrinth:iris:${property("iris")}")
+    implementation("com.github.stivais:Commodore:${property("commodore_version")}")
+    implementation("maven.modrinth:odin:${property("odin_version")}")
 }
 
 loom {
+    accessWidenerPath = rootProject.file("src/main/resources/odinaddon.accesswidener")
     runConfigs.named("client") {
-        isIdeConfigGenerated = true
-        vmArgs.addAll(
-            arrayOf(
-                "-Dmixin.debug.export=true",
-                "-Ddevauth.enabled=true",
-                "-Ddevauth.account=main",
-                "-XX:+IgnoreUnrecognizedVMOptions",
-                "-XX:+AllowEnhancedClassRedefinition",
-            )
+        generateRunConfig.set(true)
+        jvmArguments.addAll(
+            "-Dmixin.debug.export=true",
+            "-Ddevauth.enabled=true",
+            "-Ddevauth.account=main",
+            "-Dfabric.log.disableAnsi=false",
+            "-XX:StackShadowPages=32",
+            "-XX:+AllowEnhancedClassRedefinition",
         )
     }
 
     runConfigs.named("server") {
-        isIdeConfigGenerated = false
+        generateRunConfig.set(false)
     }
 }
 
 afterEvaluate {
     loom.runs.named("client") {
-        vmArg("-javaagent:${configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }}")
+        jvmArguments.add("-javaagent:${configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }}")
     }
 }
 
 tasks {
+    named<JavaExec>("runClient") {
+        javaLauncher = project.javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(25)
+            vendor = JvmVendorSpec.JETBRAINS
+        }
+    }
+
     processResources {
         filesMatching("fabric.mod.json") {
             expand(getProperties())
@@ -102,20 +81,8 @@ tasks {
     }
 }
 
-base {
-    archivesName.set(project.property("archives_base_name") as String)
-}
-
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(25))
-    }
-
-    withSourcesJar()
-}
-
-fabricApi {
-    configureDataGeneration {
-        client = true
     }
 }

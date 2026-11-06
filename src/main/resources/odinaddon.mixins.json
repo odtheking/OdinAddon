@@ -3,9 +3,6 @@
   "minVersion": "0.8",
   "package": "com.odtheking.odinaddon.mixin",
   "compatibilityLevel": "JAVA_25",
-  "mixins": [
-    "LivingEntityMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   },
@@ -13,6 +10,6 @@
     "requireAnnotations": true
   },
   "client": [
-    "ItemInHandRendererMixin"
+    "MinecraftMixin"
   ]
 }
