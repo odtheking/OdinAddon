@@ -1,66 +1,65 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("fabric-loom")
+    id("net.fabricmc.fabric-loom")
     kotlin("jvm")
-    `maven-publish`
 }
 
-group = property("maven_group")!!
-version = property("mod_version")!!
+group = property("maven_group") as String
+version = property("mod_version") as String
 
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+    maven("https://api.modrinth.com/maven")
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
+    implementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    implementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
-    modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
-    modImplementation("com.github.odtheking:odinfabric:${property("odin_version")}")
+    runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
 
-    modImplementation("com.github.stivais:Commodore:${property("commodore_version")}")
-
-    property("minecraft_lwjgl_version").let { lwjglVersion ->
-        modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
-
-        listOf("windows", "linux", "macos", "macos-arm64").forEach { os ->
-            modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
-        }
-    }
+    implementation("com.github.stivais:Commodore:${property("commodore_version")}")
+    implementation("maven.modrinth:odin:${property("odin_version")}")
 }
 
 loom {
+    accessWidenerPath = rootProject.file("src/main/resources/odinaddon.accesswidener")
     runConfigs.named("client") {
-        isIdeConfigGenerated = true
-        vmArgs.addAll(
-            arrayOf(
-                "-Dmixin.debug.export=true",
-                "-Ddevauth.enabled=true",
-                "-Ddevauth.account=main",
-                "-XX:+AllowEnhancedClassRedefinition"
-            )
+        generateRunConfig.set(true)
+        jvmArguments.addAll(
+            "-Dmixin.debug.export=true",
+            "-Ddevauth.enabled=true",
+            "-Ddevauth.account=main",
+            "-Dfabric.log.disableAnsi=false",
+            "-XX:StackShadowPages=32",
+            "-XX:+AllowEnhancedClassRedefinition",
         )
     }
 
     runConfigs.named("server") {
-        isIdeConfigGenerated = false
+        generateRunConfig.set(false)
     }
 }
 
 afterEvaluate {
     loom.runs.named("client") {
-        vmArg("-javaagent:${configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }}")
+        jvmArguments.add("-javaagent:${configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }}")
     }
 }
 
 tasks {
+    named<JavaExec>("runClient") {
+        javaLauncher = project.javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(25)
+            vendor = JvmVendorSpec.JETBRAINS
+        }
+    }
+
     processResources {
         filesMatching("fabric.mod.json") {
             expand(getProperties())
@@ -69,32 +68,21 @@ tasks {
 
     compileKotlin {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
+            jvmTarget = JvmTarget.JVM_25
             freeCompilerArgs.add("-Xlambdas=class") //Commodore
         }
     }
 
     compileJava {
-        sourceCompatibility = "21"
-        targetCompatibility = "21"
+        sourceCompatibility = "25"
+        targetCompatibility = "25"
         options.encoding = "UTF-8"
         options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:unchecked"))
     }
 }
 
-base {
-    archivesName.set(project.property("archives_base_name") as String)
-}
-
-val targetJavaVersion = 21
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-
-    withSourcesJar()
-}
-
-fabricApi {
-    configureDataGeneration {
-        client = true
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
