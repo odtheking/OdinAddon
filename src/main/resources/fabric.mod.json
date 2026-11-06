@@ -1,31 +1,31 @@
 {
-    "schemaVersion": 1,
-    "id": "odinaddon",
-    "version": "${version}",
-    "name": "OdinAddon",
-    "description": "",
-    "authors": [],
-    "contact": {},
-    "license": "BSD-3-Clause",
-    "icon": "assets/icon.png",
-    "environment": "client",
-    "entrypoints": {
-        "client": [
-            {
-                "adapter": "kotlin",
-                "value": "com.odtheking.odinaddon.OdinAddon"
-            }
-        ]
-    },
-    "mixins": [
-        "odinaddon.mixins.json"
-    ],
-    "accessWidener": "odinaddon.accesswidener",
-    "depends": {
-        "minecraft": ">=${minecraft_version}",
-        "fabricloader": ">=${loader_version}",
-        "fabric-api": "*",
-        "fabric-language-kotlin": "*",
-        "odin": ">=${odin_version}"
-    }
+  "schemaVersion": 1,
+  "id": "odinaddon",
+  "version": "${version}",
+  "name": "OdinAddon",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "BSD-3-Clause",
+  "icon": "assets/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "com.odtheking.odinaddon.OdinAddon"
+      }
+    ]
+  },
+  "mixins": [
+    "odinaddon.mixins.json"
+  ],
+  "accessWidener": "odinaddon.accesswidener",
+  "depends": {
+    "minecraft": ">=${minecraft_version}",
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "fabric-language-kotlin": "*",
+    "odin": ">=${odin_version}"
+  }
 }
