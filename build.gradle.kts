@@ -53,6 +53,13 @@ afterEvaluate {
 }
 
 tasks {
+    named<JavaExec>("runClient") {
+        javaLauncher = project.javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(25)
+            vendor = JvmVendorSpec.JETBRAINS
+        }
+    }
+
     processResources {
         filesMatching("fabric.mod.json") {
             expand(getProperties())
