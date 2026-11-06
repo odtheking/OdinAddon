@@ -10,6 +10,8 @@
     "requireAnnotations": true
   },
   "client": [
-    "MinecraftMixin"
+    "FirstPersonHandsAndItemsMixin",
+    "FirstPersonHandsAndItemsRendererMixin",
+    "LivingEntityMixin"
   ]
 }

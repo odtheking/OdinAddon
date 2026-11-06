@@ -23,7 +23,6 @@ dependencies {
 
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
 
-    implementation("com.github.stivais:Commodore:${property("commodore_version")}")
     implementation("maven.modrinth:odin:${property("odin_version")}")
 }
 
@@ -69,7 +68,6 @@ tasks {
     compileKotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_25
-            freeCompilerArgs.add("-Xlambdas=class") //Commodore
         }
     }
 
