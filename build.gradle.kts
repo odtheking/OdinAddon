@@ -27,7 +27,6 @@ dependencies {
 }
 
 loom {
-    accessWidenerPath = rootProject.file("src/main/resources/odinaddon.accesswidener")
     runConfigs.named("client") {
         generateRunConfig.set(true)
         jvmArguments.addAll(

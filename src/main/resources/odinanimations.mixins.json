@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.odtheking.odinaddon.mixin",
+  "package": "com.odtheking.odinanimations.mixin",
   "compatibilityLevel": "JAVA_25",
   "injectors": {
     "defaultRequire": 1

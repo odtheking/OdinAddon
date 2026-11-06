@@ -1,8 +1,8 @@
-package com.odtheking.odinaddon
+package com.odtheking.odinanimations
 
 import com.odtheking.odin.config.ModuleConfig
 import com.odtheking.odin.features.ModuleManager
-import com.odtheking.odinaddon.features.impl.render.Animations
+import com.odtheking.odinanimations.features.impl.render.Animations
 import net.fabricmc.api.ClientModInitializer
 
 object OdinAnimations : ClientModInitializer {

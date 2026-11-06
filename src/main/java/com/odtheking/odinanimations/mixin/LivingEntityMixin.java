@@ -1,6 +1,6 @@
-package com.odtheking.odinaddon.mixin;
+package com.odtheking.odinanimations.mixin;
 
-import com.odtheking.odinaddon.features.impl.render.Animations;
+import com.odtheking.odinanimations.features.impl.render.Animations;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.component.SwingAnimation;

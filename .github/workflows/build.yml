@@ -30,6 +30,6 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           path: |
-            build/libs/OdinAddon-*.jar
-            !build/libs/OdinAddon-*-sources.jar
+            build/libs/OdinAnimations-*.jar
+            !build/libs/OdinAnimations-*-sources.jar
           archive: false

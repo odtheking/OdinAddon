@@ -1,11 +1,11 @@
-package com.odtheking.odinaddon.mixin;
+package com.odtheking.odinanimations.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.odtheking.odinaddon.features.impl.render.Animations;
+import com.odtheking.odinanimations.features.impl.render.Animations;
 import net.minecraft.client.renderer.FirstPersonHandsAndItemsRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;

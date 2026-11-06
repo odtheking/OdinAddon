@@ -13,14 +13,13 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "com.odtheking.odinaddon.OdinAnimations"
+        "value": "com.odtheking.odinanimations.OdinAnimations"
       }
     ]
   },
   "mixins": [
-    "odinaddon.mixins.json"
+    "odinanimations.mixins.json"
   ],
-  "accessWidener": "odinaddon.accesswidener",
   "depends": {
     "minecraft": ">=${minecraft_version}",
     "fabricloader": ">=${loader_version}",

@@ -1,7 +1,7 @@
-package com.odtheking.odinaddon.mixin;
+package com.odtheking.odinanimations.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.odtheking.odinaddon.features.impl.render.Animations;
+import com.odtheking.odinanimations.features.impl.render.Animations;
 import net.minecraft.client.player.FirstPersonHandsAndItems;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.ItemStack;

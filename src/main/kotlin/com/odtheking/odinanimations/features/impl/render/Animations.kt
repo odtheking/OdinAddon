@@ -1,4 +1,4 @@
-package com.odtheking.odinaddon.features.impl.render
+package com.odtheking.odinanimations.features.impl.render
 
 import com.odtheking.odin.clickgui.settings.RenderableSetting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
