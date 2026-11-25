@@ -10,6 +10,7 @@ version = property("mod_version") as String
 
 repositories {
     mavenCentral()
+    google() // compose runtime (Odin dependency)
     maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven("https://api.modrinth.com/maven")
@@ -24,7 +25,7 @@ dependencies {
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
 
     implementation("com.github.stivais:Commodore:${property("commodore_version")}")
-    implementation("maven.modrinth:odin:${property("odin_version")}")
+    implementation("com.github.odtheking:Odin:${property("odin_commit")}")
 }
 
 loom {

@@ -10,6 +10,7 @@ import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.Colors
 import com.odtheking.odin.utils.modMessage
+import com.odtheking.odin.utils.render.text
 import com.odtheking.odin.utils.render.textDim
 import net.minecraft.network.protocol.game.ClientboundSoundPacket
 
@@ -41,8 +42,17 @@ object TestModule : Module(
     private val map by MapSetting("Example Map Setting", mutableMapOf("Key1" to "Value1", "Key2" to "Value2"))
 
     // This is how you can register a HUD under the module
-    private val hud by HUD("Example HUD", desc = "This is a hud.") {
+    // `example` is drawn in the HUD editor and must return the width and height of the HUD
+    // the trailing lambda is what is drawn in-game
+    private val hud by HUD("Example HUD", desc = "This is a hud.", example = {
         textDim("Hello, Odin HUD!", 0, 0) // This function automatically returns the width and height of the text rendered
+    }) {
+        text("Hello, Odin HUD!", 0, 0)
+    }
+
+    // For single line text HUDs you can use TextHUD, return null from the trailing lambda to hide it
+    private val textHud by TextHUD("Example Text HUD", desc = "This is a text hud.", example = { "Example text" }) {
+        if (boolean) "Live text" else null
     }
 
     // This is where you register events to the eventbus
